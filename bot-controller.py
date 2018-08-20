@@ -2,7 +2,7 @@ import discord
 import asyncio
 from splatoonschedule import get_updates
 
-TOKEN = 'XXXXXXXXX'
+TOKEN = 'XXXXXXX'
 
 client = discord.Client()
 

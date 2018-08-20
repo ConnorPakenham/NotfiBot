@@ -14,12 +14,12 @@ def format_datetime(data):
             month = int(month) + 1
             day = day - 31
 
-    return (time + " " + str(day) + "-" + str(month)+ "-" + str(datetime.datetime.now().year))
+    return (new_time + " " + str(day) + "-" + str(month)+ "-" + str(datetime.datetime.now().year))
  
     
 
 def convert_to_bst(time):
-    
+    print(time)
     if "am" in time: 
         time = int(time.strip("am")) + 8
     elif "pm" in time: 
@@ -34,7 +34,7 @@ def convert_to_bst(time):
     else:
         time = time - 24
         time = (str(time)+ "am")
-
+    print(time)
     return time
 
 def format_post(start, end, maps, weapons):

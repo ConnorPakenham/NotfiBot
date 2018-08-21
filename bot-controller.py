@@ -3,7 +3,7 @@ import asyncio
 import time
 from splatoonschedule import get_updates
 
-TOKEN = 'XXXXXXX'
+TOKEN = 'XXXXXX'
 
 client = discord.Client()
 
@@ -49,6 +49,14 @@ async def on_message(message):
         msg += "\n=================================\n"
 
         await client.send_message(channel, msg)
+    elif message.content.startswith("!clear"):
+        channel = discord.Object(id='478905754510688279')
+        mgs = []
+        async for x in client.logs_from(channel, limit = 20) :
+            if x.author == client.user:
+                mgs.append(x)
+        
+        await client.delete_messages(mgs)
         
 
 async def check_for_updates():

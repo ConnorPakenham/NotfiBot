@@ -1,5 +1,6 @@
 import discord
 import asyncio
+import time
 from splatoonschedule import get_updates
 
 TOKEN = 'XXXXXXX'
@@ -39,8 +40,18 @@ async def on_message(message):
             msg = "Already on the mailing list"
 
         await client.send_message(message.channel, msg)
+    elif message.content.startswith('!check'):
+        channel = discord.Object(id='478905754510688279')
+        f = open("splatoon2/lastmsg", "r")
+        msg = "Salmon Run" 
+        msg += "\n=================================\n"
+        msg +=  f.read()
+        msg += "\n=================================\n"
 
-async def my_background_task():
+        await client.send_message(channel, msg)
+        
+
+async def check_for_updates():
     await client.wait_until_ready()
     channel = discord.Object(id='478905754510688279')
     while not client.is_closed:
@@ -68,6 +79,35 @@ async def my_background_task():
 
         await asyncio.sleep(7200) # task runs every 2 hours
 
+async def remind_lauren():
+    await client.wait_until_ready()
+    channel = discord.Object(id='478905754510688279')
+    while not client.is_closed:
+        f = open("splatoon2/eta_time", "r")
+        eta = f.read()
+        eta_start, eta_end = eta.split("//")
+        eta_time, eta_date  = eta_start.split(" ")
+        if eta_date.strip()  == time.strftime("%d-%m-%Y"):
+            if eta_time[:-2] == time.strftime("%H"):
+                f = open("splatoon2/lastmsg", "r")
+                msg = "***STARTING SOON Salmon Run STARTING SOON***" 
+                msg += "\n=================================\n"
+                msg +=  f.read()
+                msg += "\n=================================\n"
+
+                sub_file = open("splatoon2/splatoon2", "r")
+
+                for line in sub_file:
+                    subscriber,topic = line.split("//")
+                    if 'splatoon2' == topic.strip():
+                        msg += subscriber + " "
+
+                await client.send_message(channel, msg)
+        await asyncio.sleep(60)
+
+
+
+
 @client.event
 async def on_ready():
     print('Logged in as')
@@ -75,5 +115,6 @@ async def on_ready():
     print(client.user.id)
     print('------')
 
-client.loop.create_task(my_background_task())
+client.loop.create_task(check_for_updates())
+client.loop.create_task(remind_lauren())
 client.run(TOKEN)

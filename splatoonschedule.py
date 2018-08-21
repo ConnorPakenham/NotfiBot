@@ -12,6 +12,8 @@ def format_datetime(data):
         day = int(day) + 1
         if day > 31:
             month = int(month) + 1
+            if month > 10:
+                month = "0" + str(month)
             day = day - 31
 
     return (new_time + " " + str(day) + "-" + str(month)+ "-" + str(datetime.datetime.now().year))
@@ -19,7 +21,6 @@ def format_datetime(data):
     
 
 def convert_to_bst(time):
-    print(time)
     if "am" in time: 
         time = int(time.strip("am")) + 8
     elif "pm" in time: 
@@ -34,7 +35,6 @@ def convert_to_bst(time):
     else:
         time = time - 24
         time = (str(time)+ "am")
-    print(time)
     return time
 
 def format_post(start, end, maps, weapons):
@@ -54,4 +54,8 @@ def get_updates():
 
     start = format_datetime(start)
     end = format_datetime(end)
+
+    f = open("splatoon2/eta_time", "w")
+    f.write(start + "//" + end)
+
     return (format_post(start, end, parts[1], parts[2]))
